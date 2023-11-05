@@ -1,0 +1,29 @@
+version: "2"
+services:
+  n_bot: 
+    build:
+      context: ./projects/NBot
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./projects/NBot
+        target: /projects/app
+      - type: bind
+        source: database
+        target: /database
+    tty: true
+  e_ras: 
+    build:
+      context: ./projects/eRAS
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./projects/eRAS
+        target: /app
+      - type: bind
+        source: database
+        target: /database
+    tty: true
+volumes:
+  database:
+  
