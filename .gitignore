@@ -161,4 +161,5 @@ cython_debug/
 
 config.ini
 temp.csv
-database/circle.db
+circle.db
+.vscode/*
