@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import logging
 import csv
+import pandas
 from sqlalchemy.dialects import sqlite
 
 from database.setting import create_session
@@ -53,7 +54,14 @@ class Members(commands.GroupCog, group_name="members"):
 
     @app_commands.command(name="export", description="名簿出力")
     async def export(self, interaction: discord.Interaction):
-        await interaction.response.send_message("export")
+        await interaction.response.defer()
+        session = create_session()
+        query = session.query(datamodel.Member.student_id, datamodel.Member.name)
+        dataframe = pandas.read_sql(str(query), session.connection(), )
+        dataframe.to_csv("temp.csv")
+        session.close()
+        await interaction.followup.send(file=discord.File("temp.csv"))
+
 
 async def try_execute_statement(state: sqlite.Insert) -> bool:
     is_complet = True
