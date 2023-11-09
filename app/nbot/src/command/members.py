@@ -18,7 +18,7 @@ class Members(commands.GroupCog, group_name="members"):
 
     @app_commands.command(name="import", description="名簿をCSVからインポート")
     async def import_csv(self, interaction: discord.Interaction, csv_file: discord.Attachment):
-        logger.info(f"execute namelist command by {interaction.user.id}")
+        logger.info(f"execute members import by {interaction.user.id}")
         
         await interaction.response.defer(thinking=True)
         res, rows = await try_csv_parse(csv_file)
@@ -48,12 +48,10 @@ class Members(commands.GroupCog, group_name="members"):
             res_text = "データベースの更新に失敗しました。\n時間を置いて再度実行してください。"
         await interaction.followup.send(res_text)
 
-    @app_commands.command(name="remove", description="削除")
-    async def remove(self, interaction: discord.Interaction):
-        await interaction.response.send_message("remove!")
-
     @app_commands.command(name="export", description="名簿出力")
     async def export(self, interaction: discord.Interaction):
+        logger.info(f"execute members export by {interaction.user.id}")
+
         await interaction.response.defer()
         session = create_session()
         query = session.query(datamodel.Member.student_id, datamodel.Member.name)
