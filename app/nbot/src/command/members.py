@@ -5,7 +5,7 @@ import logging
 import csv
 from sqlalchemy.dialects import sqlite
 
-from database.setting import session
+from database.setting import create_session
 import database.model as datamodel
 
 logger = logging.getLogger("project")
@@ -55,6 +55,7 @@ class Members(commands.GroupCog, group_name="members"):
         )
         is_success = True
         try: 
+            session = create_session()
             session.execute(state)
             session.commit()
         except:
