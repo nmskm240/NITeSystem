@@ -160,6 +160,6 @@ cython_debug/
 #.idea/
 
 config.ini
-temp.csv
-circle.db
+**/temp.csv
+circle.sqlite3
 .vscode/*
