@@ -60,6 +60,35 @@ class Members(commands.GroupCog, group_name="members"):
         session.close()
         await interaction.followup.send(file=discord.File("temp.csv"))
 
+    @app_commands.command(name="join", description="自身を名簿に登録")
+    async def join(self, interaction: discord.Interaction, student_id: int, name: str):
+        logger.info(f"execute members join by {interaction.user.id}")
+
+        if 100000 > student_id or student_id >= 1000000 or not name:
+            await interaction.response.send_message("入力が正しくありません。", ephemeral=True)
+            return
+        
+        await interaction.response.defer()
+        state = sqlite.insert(datamodel.Member).values([
+            dict(
+                student_id = student_id,
+                discord_id = interaction.user.id,
+                name = name,
+            ) 
+        ])
+        state = state.on_conflict_do_update(
+            index_elements=["student_id", "discord_id"],
+            set_=dict(
+                student_id=state.excluded.student_id,
+                discord_id=state.excluded.discord_id
+            ),
+        )
+        is_complete = await try_execute_statement(state)
+        if is_complete:
+            res_text = "名簿に登録しました" 
+        else:
+            res_text = "名簿の登録に失敗しました。\n時間を置いて再度実行してください。"
+        await interaction.followup.send(res_text, ephemeral=True)
 
 async def try_execute_statement(state: sqlite.Insert) -> bool:
     is_complet = True
