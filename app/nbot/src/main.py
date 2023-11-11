@@ -22,6 +22,7 @@ class Bot(commands.Bot):
     async def setup_hook(self) -> None:
         logger.info("setup hook")
         await self.load_extension("command.members")
+        await self.load_extension("command.log")
         await self.tree.sync(guild=discord.Object(id="853968633340100648"))
 
     async def on_ready(self):
