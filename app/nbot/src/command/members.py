@@ -105,6 +105,9 @@ async def try_execute_statement(state: sqlite.Insert) -> bool:
     return is_complet
 
 async def try_csv_parse(csv_file: discord.Attachment) -> tuple[str, list[dict[str]]]:
+    if not csv_file.content_type.startswith("text/csv"):
+        logger.error("unsupported file")
+        return "サポートされていないファイル形式です。\nCSV形式に変換して再実行してください。", []
     try: 
         await csv_file.save(".//temp.csv")
         with open("temp.csv", "r") as file:
@@ -114,9 +117,6 @@ async def try_csv_parse(csv_file: discord.Attachment) -> tuple[str, list[dict[st
                 "student_id" not in rows[0] or \
                 "discord_id" not in rows[0]:
                 raise KeyError()
-    except csv.Error as e:
-        logger.error("unsupported file")
-        return "サポートされていないファイル形式です。\nCSV形式に変換して再実行してください。", []
     except KeyError as e:
         logger.error("unsupported csv file")
         return "csvファイルにname、student_id, discord_idいずれかのヘッダーが存在しません。\nヘッダーを見直して再実行してください。", []
