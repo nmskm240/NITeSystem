@@ -16,6 +16,23 @@ class Members(commands.GroupCog, group_name="members"):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: discord.Member):        
+        if member.bot:
+            return
+        
+        logger.info(f"remove member {member.id}")
+        session = create_session()
+        query = session.query(datamodel.Member).filter_by(discord_id=member.id).first()
+        try:
+            session.delete(query)
+            session.commit()
+        except:
+            logger.error(f"unregisted member discord_id = {member.id}")
+            session.rollback()
+        finally:
+            session.close()
+
     @app_commands.command(name="import", description="名簿をCSVからインポート")
     async def import_csv(self, interaction: discord.Interaction, csv_file: discord.Attachment):
         logger.info(f"execute members import by {interaction.user.id}")
