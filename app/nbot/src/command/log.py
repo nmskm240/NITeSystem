@@ -1,10 +1,16 @@
-import discord
-from discord import app_commands
-from discord.ext import commands
 import logging
+import os
+from pathlib import Path
 
-from database.setting import create_session
-import database.model as datamodel
+import discord
+from discord import app_commands, ui
+from discord.ext import commands
+from view.file_select_menu import FileSelectMenu
+
+LOGS_DIRECTORY = "./logs"
+LOG_FILE_EXTENTION = ".log"
+LOG_FILE_REGEXP = f"*{LOG_FILE_EXTENTION}"
+FILE_SELECT_TIME_OUT = 60.0
 
 logger = logging.getLogger("nbot.command")
 
@@ -14,8 +20,17 @@ class Log(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="log", description="ログファイルを表示")
-    async def send_log_file(self, interaction: discord.Interaction):
-        await interaction.response.send_message(file=discord.File(".log"))
+    async def send_log_file(self, interaction: discord.Interaction, need_previour_file: bool):
+        logger.info(f"execute log by {interaction.user.id}")
+        
+        if need_previour_file:
+            await interaction.response.defer()
+            view = ui.View(timeout=FILE_SELECT_TIME_OUT)
+            selector = FileSelectMenu(directory_path=LOGS_DIRECTORY, regexp=LOG_FILE_REGEXP)
+            view.add_item(selector)
+            await interaction.followup.send(view=view)
+        else:
+            await interaction.followup.send(file=discord.File(Path(LOGS_DIRECTORY).joinpath(LOG_FILE_EXTENTION)))
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Log(bot), guild=discord.Object(id="853968633340100648"))

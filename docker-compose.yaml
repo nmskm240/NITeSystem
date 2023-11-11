@@ -7,7 +7,7 @@ services:
     volumes:
       - type: bind
         source: .
-        target: /app
+        target: /project
     tty: true
 volumes:
   database:

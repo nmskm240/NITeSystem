@@ -11,9 +11,9 @@ handlers:
   file:
     class: logging.handlers.TimedRotatingFileHandler
     level: INFO
-    filename: 'log/.log'
+    filename: 'logs/.log'
     formatter: simple
-    backupCount: 30
+    backupCount: 7
     interval: 1
     when: "d"
 loggers:
