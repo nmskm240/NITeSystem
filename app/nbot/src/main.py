@@ -3,13 +3,15 @@ from discord.ext import commands
 from configparser import ConfigParser
 from logging import config, getLogger
 import yaml
+import coloredlogs
 
 from database import setting, model
 
 parser = ConfigParser()
 parser.read("config.ini")
 config.dictConfig(yaml.safe_load(open("logger_config.yaml").read()))
-logger = getLogger("project")
+logger = getLogger("nbot")
+coloredlogs.install()
 
 model.base.Base.metadata.create_all(bind=setting.Engine)
 

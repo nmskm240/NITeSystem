@@ -9,7 +9,7 @@ from sqlalchemy.dialects import sqlite
 from database.setting import create_session
 import database.model as datamodel
 
-logger = logging.getLogger("project")
+logger = logging.getLogger("nbot.command")
 
 @app_commands.guild_only()
 class Members(commands.GroupCog, group_name="members"):
