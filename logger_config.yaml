@@ -15,7 +15,9 @@ handlers:
     formatter: simple
 loggers:
   nbot:
-    level: INFO
+    level: DEBUG
+  discord:
+    level: DEBUG
 root:
-  level: DEBUG
+  level: INFO
   handlers: [console, file]
