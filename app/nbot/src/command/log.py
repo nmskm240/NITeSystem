@@ -19,7 +19,7 @@ class Log(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="log", description="ログファイルを表示")
-    async def send_log_file(self, interaction: discord.Interaction, need_previour_file: bool):
+    async def send_log_file(self, interaction: discord.Interaction, need_previour_file: bool = False):
         logger.info(f"execute log by {interaction.user.id}")
         
         if need_previour_file:
@@ -27,7 +27,8 @@ class Log(commands.Cog):
             view = LogFileSelector()
             await interaction.followup.send(view=view, ephemeral=True)
         else:
-            await interaction.followup.send(file=discord.File(Path(LOGS_DIRECTORY).joinpath(LOG_FILE_EXTENTION)), ephemeral=False)
+            log_file_path = Path(LOGS_DIRECTORY).joinpath(LOG_FILE_EXTENTION)
+            await interaction.response.send_message(file=discord.File(log_file_path))
 
 class LogFileSelector(ui.View):
     def __init__(self, *, timeout: float | None = 180):
