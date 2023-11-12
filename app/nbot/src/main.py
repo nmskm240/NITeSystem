@@ -1,11 +1,11 @@
-import discord
-from discord.ext import commands
 from configparser import ConfigParser
 from logging import config, getLogger
-import yaml
-import coloredlogs
 
-from database import setting, model
+import coloredlogs
+import discord
+import yaml
+from database import model, setting
+from discord.ext import commands
 
 parser = ConfigParser()
 parser.read("config.ini")
@@ -22,6 +22,7 @@ class Bot(commands.Bot):
     async def setup_hook(self) -> None:
         logger.info("setup hook")
         await self.load_extension("command.members")
+        await self.load_extension("command.log")
         await self.tree.sync(guild=discord.Object(id="853968633340100648"))
 
     async def on_ready(self):

@@ -163,3 +163,4 @@ config.ini
 **/temp.csv
 circle.sqlite3
 .vscode/*
+**/logs/*.log*
