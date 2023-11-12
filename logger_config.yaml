@@ -14,8 +14,7 @@ handlers:
     filename: 'logs/.log'
     formatter: simple
     backupCount: 7
-    interval: 1
-    when: "d"
+    when: "MIDNIGHT"
 loggers:
   nbot:
     level: DEBUG

@@ -8,7 +8,7 @@ from view.file_select_menu import FileSelectMenu
 
 LOGS_DIRECTORY = "./logs"
 LOG_FILE_EXTENTION = ".log"
-LOG_FILE_REGEXP = f"*{LOG_FILE_EXTENTION}"
+LOG_FILE_REGEXP = f"*{LOG_FILE_EXTENTION}*"
 FILE_SELECT_TIME_OUT = 60.0
 
 logger = logging.getLogger("nbot.command")
