@@ -1,11 +1,11 @@
-import discord
-from discord.ext import commands
 from configparser import ConfigParser
 from logging import config, getLogger
-import yaml
-import coloredlogs
 
-from database import setting, model
+import coloredlogs
+import discord
+import yaml
+from database import model, setting
+from discord.ext import commands
 
 parser = ConfigParser()
 parser.read("config.ini")
